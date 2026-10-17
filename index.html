@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Take A Bite — Digital Menu</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --void:#0A0B09;
+    --surface:#141613;
+    --surface-2:#1C1F1A;
+    --edge:rgba(255,255,255,0.09);
+    --text:#F3F4EF;
+    --text-dim:rgba(243,244,239,0.6);
+    --lime:#C6FF3A;
+    --wa:#25D366;
+    --radius:18px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  [hidden]{display:none !important;}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--void);
+    color:var(--text);
+    font-family:'Work Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .page{
+    max-width:480px;
+    margin:0 auto;
+    background:radial-gradient(circle at 50% 0%,rgba(198,255,58,0.08),transparent 42%),var(--void);
+    min-height:100vh;
+    position:relative;
+    padding-bottom:100px;
+  }
+
+  h1,h2,h3{font-family:'Anton',sans-serif;font-weight:400;letter-spacing:.01em;margin:0;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--lime);outline-offset:2px;}
+
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--lime);
+  }
+
+  .glow-lime{
+    color:#E7FFAE;
+    text-shadow:0 0 6px rgba(198,255,58,.85),0 0 18px rgba(198,255,58,.5),0 0 40px rgba(198,255,58,.25);
+  }
+
+  /* ================= CHECKER STRIP ================= */
+
+  .neon-strip{
+    height:9px;
+    margin:0 18px;
+    background-image:
+      linear-gradient(45deg,var(--lime) 25%,transparent 25%),
+      linear-gradient(-45deg,var(--lime) 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,var(--lime) 75%),
+      linear-gradient(-45deg,transparent 75%,var(--lime) 75%);
+    background-size:9px 9px;
+    background-position:0 0,0 4.5px,4.5px -4.5px,-4.5px 0;
+    filter:drop-shadow(0 0 5px rgba(198,255,58,.45));
+    animation:strippulse 3s ease-in-out infinite;
+  }
+
+  @keyframes strippulse{0%,100%{opacity:.75}50%{opacity:1}}
+
+  .checker-bg{
+    background-image:
+      linear-gradient(45deg,var(--surface-2) 25%,transparent 25%),
+      linear-gradient(-45deg,var(--surface-2) 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,var(--surface-2) 75%),
+      linear-gradient(-45deg,transparent 75%,var(--surface-2) 75%);
+    background-size:12px 12px;
+    background-position:0 0,0 6px,6px -6px,-6px 0;
+    background-color:var(--surface);
+  }
+
+  /* ================= HEADER ================= */
+
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,9,18,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--edge);
+    padding:14px 18px 12px;
+  }
+
+  .brand-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .brand-left{display:flex;align-items:center;gap:10px;}
+
+  .checker-badge{
+    width:28px;height:28px;border-radius:7px;flex-shrink:0;
+    background-image:
+      linear-gradient(45deg,var(--lime) 25%,transparent 25%),
+      linear-gradient(-45deg,var(--lime) 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,var(--lime) 75%),
+      linear-gradient(-45deg,transparent 75%,var(--lime) 75%);
+    background-size:8px 8px;
+    background-position:0 0,0 4px,4px -4px,-4px 0;
+    background-color:#0A0B09;
+    border:1px solid var(--edge);
+  }
+
+  .brand-wordmark{
+    font-family:'Anton',sans-serif;
+    font-size:21px;line-height:1;
+    color:#E7FFAE;
+    text-shadow:0 0 5px rgba(198,255,58,.85),0 0 14px rgba(198,255,58,.5),0 0 30px rgba(198,255,58,.25);
+  }
+
+  .brand-tag{
+    font-family:'Space Mono',monospace;
+    font-size:9.5px;color:var(--text-dim);margin-top:4px;
+    letter-spacing:.05em;text-transform:uppercase;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .status-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--lime);
+    box-shadow:0 0 6px rgba(198,255,58,.9);
+    flex-shrink:0;
+    animation:strippulse 2s ease-in-out infinite;
+  }
+
+  .header-cart{
+    width:38px;height:38px;border-radius:50%;
+    background:var(--surface-2);
+    border:1px solid rgba(198,255,58,.35);
+    color:var(--lime);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;cursor:pointer;
+  }
+
+  .header-cart svg{width:18px;height:18px;fill:currentColor;}
+
+  .cart-count{
+    position:absolute;top:-4px;right:-3px;
+    min-width:17px;height:17px;padding:0 4px;
+    border-radius:99px;background:var(--lime);color:#0A0B09;
+    font-family:'Space Mono',monospace;font-size:9px;font-weight:700;
+    display:none;align-items:center;justify-content:center;
+  }
+
+  .cart-count.visible{display:flex;}
+
+  /* ================= NAV ================= */
+
+  nav.subnav{
+    position:sticky;top:65px;z-index:49;
+    background:rgba(10,9,18,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--edge);
+    padding:10px 14px;display:flex;gap:8px;
+    overflow-x:auto;scrollbar-width:none;
+  }
+
+  nav.subnav::-webkit-scrollbar{display:none;}
+
+  .navpill{
+    flex-shrink:0;
+    font-family:'Space Mono',monospace;
+    font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;
+    padding:8px 13px;border-radius:999px;
+    border:1px solid var(--edge);color:var(--text-dim);background:var(--surface);
+  }
+
+  .navpill.active{
+    background:var(--lime);color:#0A0B09;border-color:var(--lime);
+    font-weight:700;box-shadow:0 0 10px rgba(198,255,58,.4);
+  }
+
+  /* ================= HERO ================= */
+
+  .hero{padding:28px 20px 22px;}
+
+  .hero-greeting{
+    font-family:'Space Mono',monospace;font-size:12px;color:var(--lime);
+    letter-spacing:.08em;text-transform:uppercase;
+  }
+
+  .hero h1{font-size:33px;line-height:1.05;margin-top:10px;}
+
+  .hero p.lede{
+    margin-top:12px;font-size:14.5px;line-height:1.55;
+    color:var(--text-dim);max-width:340px;
+  }
+
+  /* ================= TODAY'S SPECIAL ================= */
+
+  .hot-seller{
+    margin-top:22px;
+    background:linear-gradient(145deg,rgba(198,255,58,.14),rgba(198,255,58,.035)),var(--surface);
+    border:1px solid rgba(198,255,58,.4);
+    border-radius:20px;padding:15px;
+    box-shadow:0 0 24px rgba(198,255,58,.12),inset 0 0 30px rgba(198,255,58,.025);
+    position:relative;overflow:hidden;
+  }
+
+  .hot-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+
+  .hot-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:'Space Mono',monospace;font-size:10px;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;color:#0A0B09;
+    background:var(--lime);padding:5px 9px;border-radius:999px;
+  }
+
+  .hot-body{display:flex;gap:13px;align-items:center;}
+
+  .hot-photo{
+    width:86px;height:86px;border-radius:14px;flex-shrink:0;
+    border:1px solid rgba(198,255,58,.25);
+    display:flex;align-items:center;justify-content:center;font-size:30px;
+  }
+
+  .hot-info{flex:1;min-width:0;}
+  .hot-info h2{font-size:22px;line-height:1.05;}
+  .hot-info p{margin:5px 0 9px;color:var(--text-dim);font-size:12px;line-height:1.4;}
+  .hot-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+
+  .price-tag{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;color:var(--lime);}
+
+  .hero-cta{
+    margin-top:18px;display:inline-flex;align-items:center;gap:8px;
+    background:var(--wa);color:#04240F;font-weight:700;font-size:14.5px;
+    padding:13px 18px;border-radius:999px;box-shadow:0 0 16px rgba(37,211,102,.45);
+  }
+
+  .hero-cta svg{width:18px;height:18px;fill:#04240F;}
+
+  .hero-motto{margin-top:18px;font-family:'Space Mono',monospace;font-size:10.5px;color:rgba(243,241,252,.4);}
+
+  /* ================= SECTIONS ================= */
+
+  section{padding:28px 18px 6px;scroll-margin-top:120px;}
+  .section-head h2{font-size:23px;}
+  .section-sub{font-size:13px;color:var(--text-dim);margin-top:4px;margin-bottom:6px;}
+
+  /* ================= LIST ROWS ================= */
+
+  .list{margin-top:12px;}
+
+  .list-row{
+    display:flex;align-items:center;gap:13px;
+    padding:13px 2px;border-bottom:1px solid var(--edge);
+  }
+
+  .list-row:last-child{border-bottom:none;}
+
+  .list-thumb{
+    width:64px;height:64px;border-radius:12px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;border:1px solid var(--edge);
+  }
+
+  .list-content{flex:1;min-width:0;}
+
+  .list-content h3{
+    font-family:'Work Sans',sans-serif;font-weight:700;font-size:14.5px;line-height:1.3;
+  }
+
+  .list-content p{
+    font-size:11.5px;color:var(--text-dim);margin:3px 0 5px;line-height:1.4;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  }
+
+  .list-add{
+    width:36px;height:36px;border-radius:50%;flex-shrink:0;
+    background:var(--lime);color:#0A0B09;border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:800;line-height:1;
+    box-shadow:0 0 10px rgba(198,255,58,.3);
+  }
+
+  .list-add:active{transform:scale(.94);}
+
+  /* ================= INFO ================= */
+
+  .info-card{
+    background:var(--surface);border:1px solid var(--edge);
+    border-radius:var(--radius);padding:18px;margin-bottom:16px;margin-top:6px;
+  }
+
+  .info-row{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--edge);}
+  .info-row:last-child{border-bottom:none;}
+
+  .info-icon{
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(198,255,58,.1);border:1px solid rgba(198,255,58,.3);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+
+  .info-icon svg{width:16px;height:16px;fill:var(--lime);}
+
+  .info-row h4{
+    font-size:12px;text-transform:uppercase;letter-spacing:.04em;
+    font-family:'Space Mono',monospace;color:var(--lime);margin:0 0 3px;
+  }
+
+  .info-row p{font-size:13.5px;margin:0;line-height:1.45;}
+
+  .btn-whatsapp{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--wa);color:#04240F;font-weight:700;font-size:14px;
+    padding:13px;border-radius:12px;box-shadow:0 0 16px rgba(37,211,102,.4);
+    border:0;cursor:pointer;width:100%;
+  }
+
+  .btn-whatsapp svg{width:17px;height:17px;fill:#04240F;}
+
+  /* ================= FOOTER ================= */
+
+  footer{text-align:center;padding:26px 20px 50px;color:var(--text-dim);}
+
+  footer .motto{
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;
+    color:var(--lime);text-transform:uppercase;
+  }
+
+  footer .thanks{
+    font-family:'Anton',sans-serif;font-size:20px;color:#E7FFAE;
+    text-shadow:0 0 10px rgba(198,255,58,.5);margin-top:8px;
+  }
+
+  footer .credit{font-size:11px;margin-top:14px;}
+
+  /* ================= MINI CART ================= */
+
+  .mini-cart{
+    position:fixed;left:50%;bottom:14px;
+    transform:translateX(-50%) translateY(130%);
+    width:min(450px,calc(100% - 24px));z-index:100;
+    background:rgba(20,22,19,.97);
+    border:1px solid rgba(198,255,58,.45);
+    border-radius:18px;
+    box-shadow:0 10px 40px rgba(0,0,0,.55),0 0 25px rgba(198,255,58,.12);
+    backdrop-filter:blur(10px);
+    transition:transform .25s ease;
+  }
+
+  .mini-cart.visible{transform:translateX(-50%) translateY(0);}
+
+  .mini-cart-bar{min-height:60px;padding:10px 12px 10px 15px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+
+  .cart-icon{
+    width:35px;height:35px;border-radius:11px;background:var(--lime);color:#0A0B09;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+
+  .cart-icon svg{width:18px;height:18px;fill:currentColor;}
+
+  .mini-cart-copy{flex:1;min-width:0;}
+  .mini-cart-title{font-weight:800;font-size:13px;}
+  .mini-cart-sub{color:var(--text-dim);font-family:'Space Mono',monospace;font-size:10px;margin-top:2px;}
+  .mini-cart-total{font-family:'Space Mono',monospace;color:var(--lime);font-weight:700;font-size:15px;}
+  .mini-cart-chevron{color:var(--lime);font-size:18px;transition:transform .2s ease;}
+  .mini-cart.open .mini-cart-chevron{transform:rotate(180deg);}
+
+  .cart-panel{display:none;border-top:1px solid var(--edge);max-height:58vh;overflow-y:auto;padding:12px;}
+  .mini-cart.open .cart-panel{display:block;}
+  .cart-empty{text-align:center;color:var(--text-dim);padding:20px 10px;font-size:13px;}
+
+  .cart-item{background:var(--surface);border:1px solid var(--edge);border-radius:14px;padding:12px;margin-bottom:9px;}
+  .cart-item-top{display:flex;align-items:flex-start;gap:8px;}
+  .cart-item-name{flex:1;font-weight:700;font-size:13px;line-height:1.3;}
+  .cart-item-price{font-family:'Space Mono',monospace;color:var(--lime);font-size:12px;white-space:nowrap;}
+  .cart-item-details{margin-top:6px;color:var(--text-dim);font-size:11px;line-height:1.45;}
+  .cart-item-actions{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+
+  .qty-control{
+    display:flex;align-items:center;gap:9px;background:var(--surface-2);
+    border:1px solid var(--edge);border-radius:999px;padding:3px;
+  }
+
+  .qty-control button{width:27px;height:27px;border:0;border-radius:50%;background:var(--surface);color:var(--lime);font-size:17px;cursor:pointer;}
+  .qty-control span{min-width:15px;text-align:center;font-family:'Space Mono',monospace;font-size:12px;}
+
+  .remove-btn{border:0;background:transparent;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;padding:5px;}
+
+  /* ================= MODAL (ORDER CODE) ================= */
+
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;
+    display:none;align-items:flex-end;justify-content:center;padding:14px;
+  }
+
+  .modal-backdrop.visible{display:flex;}
+
+  .sauce-modal{
+    width:min(450px,100%);background:var(--surface);
+    border:1px solid rgba(198,255,58,.35);border-radius:22px;padding:18px;
+    box-shadow:0 15px 60px rgba(0,0,0,.65);animation:modalup .2s ease;
+  }
+
+  @keyframes modalup{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px;}
+  .modal-head h3{font-size:22px;}
+
+  .modal-close{
+    width:32px;height:32px;border-radius:50%;border:1px solid var(--edge);
+    background:var(--surface-2);color:var(--text);cursor:pointer;font-size:17px;
+  }
+
+  .modal-sub{color:var(--text-dim);font-size:12px;margin:0 0 15px;}
+
+  /* ================= DELIVERY ================= */
+
+  .delivery-box{margin:4px 0 12px;}
+  .mode-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+  .mode-btn{border:1px solid var(--edge);background:var(--surface-2);color:var(--text-dim);border-radius:12px;padding:11px 8px;font-weight:700;font-size:13px;cursor:pointer;}
+  .mode-btn.active{border-color:rgba(198,255,58,.6);background:rgba(198,255,58,.1);color:var(--lime);}
+  .delivery-fields{display:none;margin-bottom:10px;}
+  .delivery-fields.visible{display:block;}
+  .delivery-fields label{display:block;font-family:'Space Mono',monospace;font-size:11px;color:var(--lime);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+  .delivery-fields textarea{width:100%;background:var(--surface-2);color:var(--text);border:1px solid var(--edge);border-radius:12px;padding:10px;font-family:inherit;font-size:13px;resize:none;}
+  .delivery-fields textarea:focus{outline:none;border-color:rgba(198,255,58,.6);}
+  .dest-error{display:none;color:#ff7a6b;font-size:11px;margin-top:5px;}
+  .dest-error.visible{display:block;}
+  .sum-rows{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:10px 12px;font-family:'Space Mono',monospace;font-size:12px;margin-bottom:10px;}
+  .sum-rows div{display:flex;justify-content:space-between;padding:3px 0;color:var(--text-dim);}
+  .sum-rows .grand{color:var(--lime);font-weight:700;font-size:14px;border-top:1px solid var(--edge);margin-top:4px;padding-top:7px;}
+  .code-box{margin:6px 0 10px;text-align:center;font-family:'Space Mono',monospace;font-weight:700;font-size:34px;letter-spacing:.08em;color:#E7FFAE;border:2px dashed rgba(198,255,58,.55);border-radius:14px;padding:16px 8px;text-shadow:0 0 10px rgba(198,255,58,.5);}
+  .code-hint{font-size:12px;color:var(--text-dim);margin:0 0 4px;line-height:1.45;}
+  .code-actions .btn-whatsapp{margin-top:8px;}
+  .btn-delivery{background:var(--lime);box-shadow:0 0 16px rgba(198,255,58,.4);}
+
+  /* ================= TOAST ================= */
+
+  .toast{
+    position:fixed;left:50%;top:78px;transform:translateX(-50%) translateY(-15px);
+    background:var(--lime);color:#0A0B09;font-weight:800;font-size:12px;
+    padding:9px 14px;border-radius:999px;z-index:300;opacity:0;pointer-events:none;
+    transition:.2s ease;box-shadow:0 5px 20px rgba(0,0,0,.35);
+  }
+
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media(max-width:380px){
+    .brand-wordmark{font-size:18px;}
+    .hot-info h2{font-size:19px;}
+    .list-thumb{width:56px;height:56px;}
+  }
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <!-- ==================================================== HEADER -->
+
+  <header>
+    <div class="brand-row">
+      <div class="brand-left">
+        <div class="checker-badge"></div>
+        <div>
+          <div class="brand-wordmark">TAKE A BITE</div>
+          <div class="brand-tag"><span class="status-dot"></span>Order online · Pickup or delivery</div>
+        </div>
+      </div>
+
+      <button class="header-cart" id="headerCart" aria-label="Open your order">
+        <svg viewBox="0 0 24 24"><path d="M7 4h-2v2h1l2.6 5.5-1 1.8A2 2 0 009.3 16H19v-2H9.4c-.1 0-.2-.1-.1-.2l.9-1.6h7.6c.8 0 1.5-.4 1.8-1.1L21.7 6H7.4L6.5 4.1C6.4 4 6.2 4 6 4H7zm2 14a2 2 0 104 0 2 2 0 00-4 0zm8 0a2 2 0 104 0 2 2 0 00-4 0z"/></svg>
+        <span class="cart-count" id="headerCartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================================================== NAV -->
+
+  <nav class="subnav">
+    <a class="navpill active" data-target="#kota" href="#kota">Kota</a>
+    <a class="navpill" data-target="#extras" href="#extras">Extras</a>
+    <a class="navpill" data-target="#info" href="#info">Find Us</a>
+  </nav>
+
+  <!-- ==================================================== HERO -->
+
+  <div class="hero">
+
+    <div class="hero-greeting">Rea u amohela · Welcome</div>
+
+    <h1 class="glow-lime">Take A Bite<br>Hot, fresh, loaded.</h1>
+
+    <p class="lede">
+      Kotas, chips and extras made to order. Pick what you like, choose
+      pickup or delivery, and send it to us on WhatsApp.
+    </p>
+
+    <!-- TODAY'S SPECIAL (shows only if TODAYS_SPECIAL is set in the settings) -->
+
+    <div class="hot-seller" id="hotSeller" hidden>
+      <div class="hot-top">
+        <span class="hot-badge">🔥 Today's Special</span>
+      </div>
+
+      <div class="hot-body">
+        <div class="hot-photo checker-bg" id="hotSellerEmoji">🍞</div>
+        <div class="hot-info">
+          <h2 id="hotSellerName"></h2>
+          <p id="hotSellerDescription"></p>
+          <div class="hot-bottom">
+            <span class="price-tag" id="hotSellerPrice"></span>
+            <button class="list-add" id="hotSellerAdd" aria-label="Add today's special" style="width:38px;height:38px;font-size:22px;">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="hero-cta" id="heroWa" href="#">
+      <svg viewBox="0 0 32 32"><path d="M16.02 3C9.4 3 4.02 8.38 4.02 15c0 2.36.65 4.56 1.79 6.45L4 29l7.73-1.77A11.9 11.9 0 0 0 16.02 27C22.64 27 28 21.62 28 15S22.64 3 16.02 3zm7.02 16.9c-.3.83-1.72 1.6-2.36 1.68-.6.08-1.36.11-2.2-.14-.5-.15-1.15-.37-1.98-.72-3.49-1.51-5.77-5.03-5.94-5.27-.17-.24-1.42-1.89-1.42-3.6 0-1.72.9-2.56 1.22-2.91.31-.34.68-.43.9-.43h.65c.2 0 .48-.08.75.57.3.72 1.01 2.48 1.1 2.66.09.18.15.4.03.64-.12.24-.18.4-.36.62-.18.21-.38.47-.54.63-.18.18-.37.37-.16.73.2.36.9 1.5 1.95 2.44 1.34 1.2 2.47 1.57 2.83 1.75.36.18.57.15.78-.09.21-.24.9-1.06 1.14-1.42.24-.36.48-.3.8-.18.32.12 2.05.98 2.4 1.16.36.18.6.27.68.42.09.15.09.85-.21 1.67z"/></svg>
+      Order on WhatsApp
+    </a>
+
+    <div class="hero-motto">KHOTSO · PULA · NALA — THE LESOTHO MOTTO</div>
+
+  </div>
+
+  <div class="neon-strip"></div>
+
+  <main>
+
+    <!-- ==================================================== KOTA -->
+
+    <section id="kota">
+      <div class="section-head">
+        <span class="eyebrow">Bread, Chips &amp; More</span>
+        <h2 class="glow-lime">Kota</h2>
+      </div>
+      <p class="section-sub">Pick your kota. What's inside is listed under each name.</p>
+      <div class="list" id="kotaList"></div>
+    </section>
+
+    <div class="neon-strip"></div>
+
+    <!-- ==================================================== EXTRAS -->
+
+    <section id="extras">
+      <div class="section-head">
+        <span class="eyebrow">Round It Out</span>
+        <h2 class="glow-lime">Extras</h2>
+      </div>
+      <p class="section-sub">Chips, drinks and a few extra bites.</p>
+      <div class="list" id="extrasList"></div>
+    </section>
+
+    <div class="neon-strip"></div>
+
+    <!-- ==================================================== INFO -->
+
+    <section id="info">
+      <div class="section-head">
+        <span class="eyebrow">Come Find Us</span>
+        <h2 class="glow-lime">Find Us</h2>
+      </div>
+      <p class="section-sub">Walk-ins, calls and WhatsApp orders all welcome.</p>
+
+      <div class="info-card">
+        <!-- FILL IN: address, hours, phone, payments -->
+        <div class="info-row">
+          <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.4 8 12 8 12s8-6.6 8-12c0-4.4-3.6-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z"/></svg></div>
+          <div><h4>Address</h4><p>Roma - Right above the Green house building</p></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M13 7h-2v6h6v-2h-4V7z"/><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z"/></svg></div>
+          <div><h4>Hours</h4><p>Open daily</p></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11.6 21 3 12.4 3 2c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.3 1L6.6 10.8z"/></svg></div>
+          <div><h4>Phone / WhatsApp</h4><p>+266 6382 2286</p></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2v.01L12 13l8-6.99V6H4zm0 2.24V18h16V8.24l-8 7-8-7z"/></svg></div>
+          <div><h4>Payments</h4><p>Cash</p></div>
+        </div>
+      </div>
+
+      <button class="btn-whatsapp" id="infoWa">
+        <svg viewBox="0 0 32 32"><path d="M16.02 3C9.4 3 4.02 8.38 4.02 15c0 2.36.65 4.56 1.79 6.45L4 29l7.73-1.77A11.9 11.9 0 0 0 16.02 27C22.64 27 28 21.62 28 15S22.64 3 16.02 3zm7.02 16.9c-.3.83-1.72 1.6-2.36 1.68-.6.08-1.36.11-2.2-.14-.5-.15-1.15-.37-1.98-.72-3.49-1.51-5.77-5.03-5.94-5.27-.17-.24-1.42-1.89-1.42-3.6 0-1.72.9-2.56 1.22-2.91.31-.34.68-.43.9-.43h.65c.2 0 .48-.08.75.57.3.72 1.01 2.48 1.1 2.66.09.18.15.4.03.64-.12.24-.18.4-.36.62-.18.21-.38.47-.54.63-.18.18-.37.37-.16.73.2.36.9 1.5 1.95 2.44 1.34 1.2 2.47 1.57 2.83 1.75.36.18.57.15.78-.09.21-.24.9-1.06 1.14-1.42.24-.36.48-.3.8-.18.32.12 2.05.98 2.4 1.16.36.18.6.27.68.42.09.15.09.85-.21 1.67z"/></svg>
+        Chat with us on WhatsApp
+      </button>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="motto">Khotso · Pula · Nala</div>
+    <div class="thanks">Rea leboha!</div>
+    <div class="credit">Take A Bite</div>
+  </footer>
+
+</div>
+
+<!-- ==================================================== MINI CART -->
+
+<div class="mini-cart" id="miniCart">
+  <div class="mini-cart-bar" id="miniCartBar">
+    <div class="cart-icon"><svg viewBox="0 0 24 24"><path d="M7 4h-2v2h1l2.6 5.5-1 1.8A2 2 0 009.3 16H19v-2H9.4c-.1 0-.2-.1-.1-.2l.9-1.6h7.6c.8 0 1.5-.4 1.8-1.1L21.7 6H7.4L6.5 4.1C6.4 4 6.2 4 6 4H7zm2 14a2 2 0 104 0 2 2 0 00-4 0zm8 0a2 2 0 104 0 2 2 0 00-4 0z"/></svg></div>
+    <div class="mini-cart-copy">
+      <div class="mini-cart-title">Your Order</div>
+      <div class="mini-cart-sub" id="miniCartSub">0 items</div>
+    </div>
+    <div class="mini-cart-total" id="miniCartTotal">M0.00</div>
+    <div class="mini-cart-chevron">↑</div>
+  </div>
+
+  <div class="cart-panel">
+    <div id="cartItems"></div>
+
+    <div class="delivery-box">
+      <div class="mode-toggle">
+        <button type="button" class="mode-btn active" data-mode="pickup">🏃 Pickup</button>
+        <button type="button" class="mode-btn" data-mode="delivery">🛵 Delivery</button>
+      </div>
+      <div class="delivery-fields" id="deliveryFields">
+        <label for="destinationInput">Where should we deliver?</label>
+        <textarea id="destinationInput" rows="3" placeholder="Area, landmark, gate colour... e.g. Roma, opposite NUL gate, green gate"></textarea>
+        <div class="dest-error" id="destinationError">Please describe your destination</div>
+      </div>
+      <div class="sum-rows">
+        <div><span>Items</span><span id="sumItems">M0.00</span></div>
+        <div id="feeRow" style="display:none;"><span>Delivery fee</span><span id="sumFee">M0.00</span></div>
+        <div class="grand"><span>Total</span><span id="sumTotal">M0.00</span></div>
+      </div>
+    </div>
+
+    <button class="btn-whatsapp" id="checkoutBtn">
+      <svg viewBox="0 0 32 32"><path d="M16.02 3C9.4 3 4.02 8.38 4.02 15c0 2.36.65 4.56 1.79 6.45L4 29l7.73-1.77A11.9 11.9 0 0 0 16.02 27C22.64 27 28 21.62 28 15S22.64 3 16.02 3zm7.02 16.9c-.3.83-1.72 1.6-2.36 1.68-.6.08-1.36.11-2.2-.14-.5-.15-1.15-.37-1.98-.72-3.49-1.51-5.77-5.03-5.94-5.27-.17-.24-1.42-1.89-1.42-3.6 0-1.72.9-2.56 1.22-2.91.31-.34.68-.43.9-.43h.65c.2 0 .48-.08.75.57.3.72 1.01 2.48 1.1 2.66.09.18.15.4.03.64-.12.24-.18.4-.36.62-.18.21-.38.47-.54.63-.18.18-.37.37-.16.73.2.36.9 1.5 1.95 2.44 1.34 1.2 2.47 1.57 2.83 1.75.36.18.57.15.78-.09.21-.24.9-1.06 1.14-1.42.24-.36.48-.3.8-.18.32.12 2.05.98 2.4 1.16.36.18.6.27.68.42.09.15.09.85-.21 1.67z"/></svg>
+      Place Order
+    </button>
+  </div>
+</div>
+
+<!-- ==================================================== ORDER CODE SCREEN -->
+
+<div class="modal-backdrop" id="codeModal">
+  <div class="sauce-modal">
+    <div class="modal-head">
+      <h3>Your Order Code</h3>
+      <button class="modal-close" id="codeModalClose" aria-label="Close">×</button>
+    </div>
+    <p class="modal-sub" id="codeModalSub"></p>
+    <div class="code-box" id="codeBoxValue">TAB-0000</div>
+    <p class="code-hint" id="codeHint"></p>
+    <div class="code-actions">
+      <button class="btn-whatsapp" id="sendRestaurantBtn">1. Send order to restaurant</button>
+      <button class="btn-whatsapp btn-delivery" id="sendDeliveryBtn">2. Send details to delivery</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Added to your order</div>
+
+<script>
+/* ============================================================
+   SETTINGS — FILL THESE IN
+============================================================ */
+
+// Orders go to this number. Country code + number, no + and no spaces.
+// Example: "26612345678". If left empty, WhatsApp lets the customer pick a contact.
+const WHATSAPP_NUMBER = "26663822286";
+
+// Delivery person's WhatsApp number, same format. Leave "" to let the customer pick.
+const DELIVERY_WHATSAPP_NUMBER = "26651793647";
+
+// Flat delivery fee in Maloti (e.g. 15). 0 means no fee is added.
+const DELIVERY_FEE = 15;
+
+const CODE_PREFIX = "TAB";
+const RESTAURANT_NAME = "Take A Bite";
+const RESTAURANT_PLACE = "";   // e.g. "Roma, near ..." — shown to the delivery person
+
+// Optional: type the exact name of any item below to feature it as Today's Special.
+// Leave "" to hide the card. Example: "AMG"
+const TODAYS_SPECIAL = "AMG";
+
+/* ============================================================
+   MENU DATA
+============================================================ */
+
+const KOTAS = [
+  { name:"Tata",     price:15, description:"Chips, French",                              emoji:"🍞" },
+  { name:"Vits",     price:23, description:"Chips, French, Special, Vienna",             emoji:"🍞" },
+  { name:"3 Series", price:28, description:"Chips, French, Special, Vienna, Cheese",     emoji:"🍞" },
+  { name:"Golf 5",   price:33, description:"Chips, French, Special, Russian",            emoji:"🍞" },
+  { name:"Golf 7",   price:38, description:"Chips, French, Special, Cheese, Russian",    emoji:"🍞" },
+  { name:"AMG",      price:45, description:"Chips, French, Special, Cheese, Egg, Russian", emoji:"🍞" },
+  { name:"Amarok",   price:50, description:"Chips, French, Cheese, Egg, Patty",          emoji:"🍞" }
+];
+
+const EXTRAS = [
+  { name:"Small Chips",              price:20, description:"Hot, salty, fresh from the fryer.", emoji:"🍟" },
+  { name:"Medium Chips",             price:25, description:"Hot, salty, fresh from the fryer.", emoji:"🍟" },
+  { name:"Large Chips",              price:30, description:"Hot, salty, fresh from the fryer.", emoji:"🍟" },
+  { name:"Russian",                  price:15, description:"Grilled Russian sausage.",          emoji:"🌭" },
+  { name:"Ice Coffee",               price:20, description:"Cold and sweet.",                   emoji:"🧋" },
+  { name:"Milk Shake (Vanilla)",     price:30, description:"Thick vanilla milk shake.",         emoji:"🥤" },
+  { name:"Milk Shake (Chocolate)",   price:30, description:"Thick chocolate milk shake.",       emoji:"🥤" },
+  { name:"Dagwood",                  price:35, description:"",                                  emoji:"🥪" },
+  { name:"Potato Spiral",            price:10, description:"Crispy spiral-cut potato.",         emoji:"🥔" },
+  { name:"Burger",                   price:40, description:"",                                  emoji:"🍔" }
+];
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function waLinkTo(number, message){
+  const base = number ? `https://wa.me/${number}` : "https://wa.me/";
+  return `${base}?text=${encodeURIComponent(message)}`;
+}
+function waLink(message){ return waLinkTo(WHATSAPP_NUMBER, message); }
+function money(amount){ return `M${Number(amount).toFixed(2)}`; }
+
+function escapeHtml(value){
+  return String(value)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+let toastTimer;
+function showToast(message){
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 1600);
+}
+
+/* ============================================================
+   ORDER (CART)
+============================================================ */
+
+let order = [];
+let orderMode = "pickup";
+let currentOrder = null;
+
+function itemTotal(item){ return item.price * item.quantity; }
+function orderItemCount(){ return order.reduce((s,i) => s + i.quantity, 0); }
+function orderTotal(){ return order.reduce((s,i) => s + itemTotal(i), 0); }
+function deliveryFee(){ return orderMode === "delivery" ? DELIVERY_FEE : 0; }
+function grandTotal(){ return orderTotal() + (order.length ? deliveryFee() : 0); }
+
+function addToOrder(menuItem){
+  const existing = order.find(i => i.name === menuItem.name);
+  if(existing){
+    existing.quantity += 1;
+  }else{
+    order.push({
+      id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+      name: menuItem.name,
+      price: Number(menuItem.price),
+      description: menuItem.description || "",
+      quantity: 1
+    });
+  }
+  renderOrder();
+  showToast(`${menuItem.name} added`);
+}
+
+function removeOrderItem(id){ order = order.filter(i => i.id !== id); renderOrder(); }
+
+function changeQuantity(id, change){
+  const item = order.find(i => i.id === id);
+  if(!item) return;
+  item.quantity += change;
+  if(item.quantity <= 0) order = order.filter(i => i.id !== id);
+  renderOrder();
+}
+
+function updateDeliveryUI(){
+  const isDelivery = orderMode === "delivery";
+  document.querySelectorAll(".mode-btn").forEach(b => b.classList.toggle("active", b.dataset.mode === orderMode));
+  document.getElementById("deliveryFields").classList.toggle("visible", isDelivery);
+  document.getElementById("feeRow").style.display = isDelivery ? "flex" : "none";
+  document.getElementById("sumItems").textContent = money(orderTotal());
+  document.getElementById("sumFee").textContent = money(DELIVERY_FEE);
+  document.getElementById("sumTotal").textContent = money(grandTotal());
+}
+
+function renderOrder(){
+  updateDeliveryUI();
+
+  const miniCart = document.getElementById("miniCart");
+  const cartItems = document.getElementById("cartItems");
+  const headerCount = document.getElementById("headerCartCount");
+  const count = orderItemCount();
+
+  document.getElementById("miniCartSub").textContent = `${count} ${count === 1 ? "item" : "items"}`;
+  document.getElementById("miniCartTotal").textContent = money(grandTotal());
+  headerCount.textContent = count;
+
+  if(count > 0){
+    miniCart.classList.add("visible");
+    headerCount.classList.add("visible");
+  }else{
+    miniCart.classList.remove("visible");
+    headerCount.classList.remove("visible");
+    miniCart.classList.remove("open");
+  }
+
+  if(order.length === 0){
+    cartItems.innerHTML = `<div class="cart-empty">Your order is empty.<br>Add something from the menu.</div>`;
+    return;
+  }
+
+  cartItems.innerHTML = order.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-top">
+        <div class="cart-item-name">${escapeHtml(item.name)}</div>
+        <div class="cart-item-price">${money(itemTotal(item))}</div>
+      </div>
+      ${item.description ? `<div class="cart-item-details">${escapeHtml(item.description)}</div>` : ""}
+      <div class="cart-item-actions">
+        <div class="qty-control">
+          <button data-action="minus" data-id="${item.id}" aria-label="Less">−</button>
+          <span>${item.quantity}</span>
+          <button data-action="plus" data-id="${item.id}" aria-label="More">+</button>
+        </div>
+        <button class="remove-btn" data-action="remove" data-id="${item.id}">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+document.getElementById("cartItems").addEventListener("click", event => {
+  const button = event.target.closest("button");
+  if(!button) return;
+  const { action, id } = button.dataset;
+  if(action === "minus") changeQuantity(id, -1);
+  if(action === "plus") changeQuantity(id, 1);
+  if(action === "remove") removeOrderItem(id);
+});
+
+document.getElementById("miniCartBar").addEventListener("click", () => {
+  document.getElementById("miniCart").classList.toggle("open");
+});
+
+document.getElementById("headerCart").addEventListener("click", () => {
+  const miniCart = document.getElementById("miniCart");
+  if(order.length === 0){
+    document.getElementById("kota").scrollIntoView({ behavior:"smooth" });
+    return;
+  }
+  miniCart.classList.add("visible");
+  miniCart.classList.add("open");
+  miniCart.scrollIntoView({ behavior:"smooth", block:"end" });
+});
+
+/* ============================================================
+   RENDER MENU LISTS
+============================================================ */
+
+function listHtml(items, group){
+  return items.map((item, index) => `
+    <div class="list-row">
+      <div class="list-thumb checker-bg">${item.emoji}</div>
+      <div class="list-content">
+        <h3>${escapeHtml(item.name)}</h3>
+        ${item.description ? `<p>${escapeHtml(item.description)}</p>` : ""}
+        <span class="price-tag">${money(item.price)}</span>
+      </div>
+      <button class="list-add" data-group="${group}" data-index="${index}" aria-label="Add ${escapeHtml(item.name)}">+</button>
+    </div>
+  `).join("");
+}
+
+document.getElementById("kotaList").innerHTML = listHtml(KOTAS, "kota");
+document.getElementById("extrasList").innerHTML = listHtml(EXTRAS, "extras");
+
+function handleListClick(event){
+  const button = event.target.closest(".list-add");
+  if(!button) return;
+  const source = button.dataset.group === "kota" ? KOTAS : EXTRAS;
+  const item = source[Number(button.dataset.index)];
+  if(item) addToOrder(item);
+}
+
+document.getElementById("kotaList").addEventListener("click", handleListClick);
+document.getElementById("extrasList").addEventListener("click", handleListClick);
+
+/* ============================================================
+   TODAY'S SPECIAL (optional)
+============================================================ */
+
+(function setupSpecial(){
+  if(!TODAYS_SPECIAL) return;
+  const item = [...KOTAS, ...EXTRAS].find(i => i.name.toLowerCase() === TODAYS_SPECIAL.toLowerCase());
+  if(!item) return;
+  document.getElementById("hotSeller").hidden = false;
+  document.getElementById("hotSellerEmoji").textContent = item.emoji;
+  document.getElementById("hotSellerName").textContent = item.name;
+  document.getElementById("hotSellerDescription").textContent = item.description;
+  document.getElementById("hotSellerPrice").textContent = money(item.price);
+  document.getElementById("hotSellerAdd").addEventListener("click", () => addToOrder(item));
+})();
+
+/* ============================================================
+   DELIVERY + ORDER CODE + WHATSAPP
+============================================================ */
+
+document.querySelector(".mode-toggle").addEventListener("click", event => {
+  const btn = event.target.closest(".mode-btn");
+  if(!btn) return;
+  orderMode = btn.dataset.mode;
+  renderOrder();
+});
+
+function makeOrderCode(){
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O or 1/I mix-ups
+  let c = "";
+  for(let i = 0; i < 4; i++) c += chars[Math.floor(Math.random() * chars.length)];
+  return `${CODE_PREFIX}-${c}`;
+}
+
+function itemLines(){
+  return order.map((item, i) => {
+    let line = `${i + 1}. ${item.quantity}x ${item.name}`;
+    if(item.description) line += `\n   (${item.description})`;
+    line += `\n   Subtotal: ${money(itemTotal(item))}`;
+    return line;
+  }).join("\n\n");
+}
+
+function buildRestaurantMessage(code, dest){
+  const isDelivery = orderMode === "delivery";
+  let m = `Hi ${RESTAURANT_NAME}! New order 🧾\nCODE: ${code}\nType: ${isDelivery ? "DELIVERY 🛵" : "PICKUP 🏃"}\n\n${itemLines()}\n\n`;
+  m += `Items: ${money(orderTotal())}\n`;
+  if(isDelivery) m += `Delivery fee: ${money(DELIVERY_FEE)}\n`;
+  m += `TOTAL: ${money(grandTotal())}\n`;
+  if(isDelivery) m += `\nDeliver to: ${dest}\n`;
+  m += `\nPlease confirm my order. Thank you!`;
+  return m;
+}
+
+function buildDeliveryMessage(code, dest){
+  const summary = order.map(i => `${i.quantity}x ${i.name}`).join(", ");
+  const from = RESTAURANT_PLACE ? `${RESTAURANT_NAME}, ${RESTAURANT_PLACE}` : RESTAURANT_NAME;
+  return `Hi! Delivery request 🛵\nCODE: ${code}\n\nCollect from: ${from}\nDeliver to: ${dest}\n\nOrder: ${summary}\nOrder total: ${money(orderTotal())}\nDelivery fee: ${money(DELIVERY_FEE)}\nTotal to collect from customer: ${money(grandTotal())}\n\nPlease confirm you can take this delivery.`;
+}
+
+function openCodeModal(){
+  const isDelivery = currentOrder.mode === "delivery";
+  document.getElementById("codeBoxValue").textContent = currentOrder.code;
+  document.getElementById("codeModalSub").textContent = isDelivery
+    ? "Show this code to the delivery person."
+    : "Show this code when you collect your order.";
+  document.getElementById("codeHint").textContent = isDelivery
+    ? "Tap both buttons so the restaurant and the delivery person both get your details. Screenshot this code."
+    : "Tap the button to send your order. Screenshot this code.";
+  document.getElementById("sendRestaurantBtn").textContent = "1. Send order to restaurant";
+  const delBtn = document.getElementById("sendDeliveryBtn");
+  delBtn.textContent = "2. Send details to delivery";
+  delBtn.style.display = isDelivery ? "flex" : "none";
+  document.getElementById("codeModal").classList.add("visible");
+}
+
+function closeCodeModal(){ document.getElementById("codeModal").classList.remove("visible"); }
+
+document.getElementById("checkoutBtn").addEventListener("click", () => {
+  if(order.length === 0){ showToast("Your order is empty"); return; }
+  const input = document.getElementById("destinationInput");
+  const err = document.getElementById("destinationError");
+  const dest = input.value.trim();
+  if(orderMode === "delivery" && !dest){
+    err.classList.add("visible");
+    input.focus();
+    return;
+  }
+  err.classList.remove("visible");
+  const code = makeOrderCode();
+  currentOrder = {
+    code, mode:orderMode, destination:dest,
+    restaurantMsg: buildRestaurantMessage(code, dest),
+    deliveryMsg: buildDeliveryMessage(code, dest)
+  };
+  openCodeModal();
+});
+
+document.getElementById("sendRestaurantBtn").addEventListener("click", () => {
+  if(!currentOrder) return;
+  window.open(waLink(currentOrder.restaurantMsg), "_blank", "noopener");
+  document.getElementById("sendRestaurantBtn").textContent = "✓ Sent to restaurant (tap to resend)";
+});
+
+document.getElementById("sendDeliveryBtn").addEventListener("click", () => {
+  if(!currentOrder) return;
+  window.open(waLinkTo(DELIVERY_WHATSAPP_NUMBER, currentOrder.deliveryMsg), "_blank", "noopener");
+  document.getElementById("sendDeliveryBtn").textContent = "✓ Sent to delivery (tap to resend)";
+});
+
+document.getElementById("codeModalClose").addEventListener("click", closeCodeModal);
+document.getElementById("codeModal").addEventListener("click", event => {
+  if(event.target.id === "codeModal") closeCodeModal();
+});
+
+const genericMessage = `Hi ${RESTAURANT_NAME}. I'd like to place an order.`;
+document.getElementById("heroWa").href = waLink(genericMessage);
+document.getElementById("infoWa").addEventListener("click", () => {
+  window.open(waLink(genericMessage), "_blank", "noopener");
+});
+
+/* ============================================================
+   ACTIVE NAV ON SCROLL
+============================================================ */
+
+const navpills = document.querySelectorAll(".navpill");
+const sections = document.querySelectorAll("main section[id]");
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      navpills.forEach(pill => pill.classList.toggle("active", pill.dataset.target === `#${entry.target.id}`));
+    }
+  });
+}, { rootMargin:"-40% 0px -50% 0px", threshold:0 });
+
+sections.forEach(section => io.observe(section));
+
+renderOrder();
+</script>
+
+</body>
+</html>
